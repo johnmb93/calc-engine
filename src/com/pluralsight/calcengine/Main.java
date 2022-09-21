@@ -29,24 +29,52 @@ public class Main {
         }
     }
 
-    static void executeIneractively(String[] parts) {
+    static void executeIneractively() {
         System.out.println("Enter  add,subtact,multiply,or divide and two numbers ");
         Scanner scanner = new Scanner(System.in);
         String userInput =scanner.nextLine();
-        userInput.split(" ");
-
+        String[] parts =  userInput.split(" ");
         performOperation(parts);
     }
 
     private static void performOperation(String[] parts) {
         char opCode = opCodeFromString(parts[0]);
-        double leftVal = opCodeFromString(parts[1]);
-        double rightVal = opCodeFromString(parts[2]);
+        double leftVal = valueFromWord(parts[1]);
+        double rightVal = valueFromWord(parts[2]);
         double result = execute(opCode,leftVal, rightVal);
+        displayResult(opCode, leftVal, rightVal, result);
         System.out.println(result);
-
     }
 
+    private static void displayResult(char opCode, double leftVal, double rightVal, double result) {
+        char symbol = symbolFromOpCode(opCode);
+        StringBuilder builder = new StringBuilder(20);
+        builder.append(leftVal);
+        builder.append(" ");
+        builder.append(symbol);
+        builder.append(" ");
+        builder.append(rightVal);
+        builder.append(" = ");
+        builder.append(result);
+        String output = builder.toString();
+
+        
+        System.out.println(output);
+    }
+
+    private static char symbolFromOpCode(char opCode) {
+        char[] opCodes = {'a', 's', 'm', 'd'};
+        char[] symbols = {'+', '-', '*', '/'};
+        char symbol = ' ';
+        for(int index = 0; index < opCodes.length; index++) {
+            if(opCode == opCodes[index]) {
+                symbol = symbols[index];
+                break;
+            }
+        }
+
+        return symbol;
+    }
     private static void handelComandLine(String[] args) {
         char opCode = args[0].charAt(0);
         double leftVal = Double.parseDouble(args[1]);
@@ -88,9 +116,9 @@ public class Main {
         return opCode;
     }
 
-    double valueFromWord(String word) {
+    static double valueFromWord(String word) {
         String[] numberWords = {
-                "zero", "one", "two", "three", "four"
+                "zero", "one", "two", "three", "four","five", "six", "seven", "eight", "nine", "ten"
         };
         double value = 0d;
         for (int index = 0; index < numberWords.length; index++) {
@@ -101,29 +129,4 @@ public class Main {
         }
         return value;
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 }
