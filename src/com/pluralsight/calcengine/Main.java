@@ -1,5 +1,6 @@
 package com.pluralsight.calcengine;
 
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
@@ -39,12 +40,24 @@ public class Main {
 
     private static void performOperation(String[] parts) {
         char opCode = opCodeFromString(parts[0]);
+        if(opCode == 'w')
+            handleWhen(parts);
+        {
+
         double leftVal = valueFromWord(parts[1]);
         double rightVal = valueFromWord(parts[2]);
         double result = execute(opCode,leftVal, rightVal);
         displayResult(opCode, leftVal, rightVal, result);
-        System.out.println(result);
+        System.out.println(result);}
     }
+
+    private static void handleWhen(String[] parts) {
+        LocalDate startDate = LocalDate.parse(parts[1]);
+        long daysToAdd = (long) valueFromWord(parts[2]);
+        LocalDate newDate = startDate.plusDays(daysToAdd);
+        String output = String.format("%s plus %d days is %s", startDate, daysToAdd, newDate);
+        System.out.println(output);
+    };
 
     private static void displayResult(char opCode, double leftVal, double rightVal, double result) {
         char symbol = symbolFromOpCode(opCode);
@@ -94,10 +107,10 @@ public class Main {
                 result = leftVal + rightVal;
                 break;
             case 's':
-                result = leftVal + rightVal;
+                result = leftVal - rightVal;
                 break;
             case 'm':
-                result = leftVal + rightVal;
+                result = leftVal * rightVal;
                 break;
             case 'd':
                 result = rightVal != 0 ? leftVal / rightVal : 0.0d;
@@ -121,13 +134,16 @@ public class Main {
         String[] numberWords = {
                 "zero", "one", "two", "three", "four","five", "six", "seven", "eight", "nine", "ten"
         };
-        double value = 0d;
+        double value = -1d;
         for (int index = 0; index < numberWords.length; index++) {
             if (word.equals(numberWords[index])) {
                 value = index;
                 break;
             }
         }
+        if(value == -1d)
+          value = Double.parseDouble(word);
+
         return value;
     }
 }
